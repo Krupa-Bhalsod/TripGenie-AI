@@ -1,25 +1,36 @@
+# Core Web Framework
 fastapi
 uvicorn
 pydantic
-pydantic-settings
 python-dotenv
+python-multipart
+
+# Database & Security
 sqlalchemy
 passlib[bcrypt]
 python-jose[cryptography]
+
+# LangChain & AI Orchestration
 langchain
 langchain-core
 langchain-community
 langchain-huggingface
 langgraph
+deepagents
+
+# LLM Providers
 langchain-groq
 langchain-google-genai
 langchain-openai
 langchain-ollama
-deepagents
+langchain-anthropic
+
+# Search & Tools
 tavily
 faiss-cpu
 sentence-transformers
-numpy
-requests
+PyYAML
+
+# Utilities
 httpx
-python-multipart
+numpy
