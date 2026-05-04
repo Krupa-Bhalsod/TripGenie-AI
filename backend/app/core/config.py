@@ -11,13 +11,32 @@ class Settings:
     def __init__(self):
         self.APP_NAME = "TripGenie AI"
 
-        # Mongo
-        self.MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
-        self.DATABASE_NAME = os.getenv("DATABASE_NAME", "tripgenie")
+        # Database
+        self.SQLITE_URL = os.getenv("SQLITE_URL", "sqlite:///./db.sqlite")
+
+        # LLM Settings
+        self.LLM_PROVIDER = os.getenv("LLM_PROVIDER", "groq") # groq, gemini, openai, ollama
+        self.LLM_MODEL = os.getenv("LLM_MODEL") # If set, overrides provider-specific defaults
+        self.TEMPERATURE = float(os.getenv("TEMPERATURE", 0.6))
 
         # Groq
         self.GROQ_API_KEY = os.getenv("GROQ_API_KEY")
         self.GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
+
+        # Google Gemini
+        self.GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+        self.GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+
+        # OpenAI
+        self.OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+        self.OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
+        # Ollama
+        self.OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5")
+
+        # Anthropic
+        self.ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+        self.ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20240620")
 
         # Tavily
         self.TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")

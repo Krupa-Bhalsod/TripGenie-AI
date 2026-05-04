@@ -3,6 +3,30 @@ Extended Trip Models with multi-city support, citations, confidence scores, and 
 """
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional, Any
+from sqlalchemy import Column, Integer, String, JSON, Float
+from app.db.sqlite import Base
+
+
+class Trip(Base):
+    __tablename__ = "trips"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(String, index=True)
+    destination = Column(String)
+    budget = Column(Integer)
+    days = Column(Integer)
+    itinerary = Column(JSON)
+    hotels = Column(JSON)
+    budget_breakdown = Column(JSON)
+    estimated_total_cost = Column(Integer)
+    city_highlights = Column(JSON)
+    transport_guide = Column(String)
+    citations = Column(JSON)
+    confidence_score = Column(Float)
+    agent_log = Column(JSON)
+    destinations = Column(JSON)
+    city_plans = Column(JSON)
+    multi_city_route = Column(JSON)
 
 
 # ─── Sub-models ────────────────────────────────────────────────────────────────
@@ -68,6 +92,8 @@ class TripRequest(BaseModel):
 
 
 class TripResponse(BaseModel):
+    id: Optional[int] = None
+    user_id: Optional[str] = None
     destinations: List[str] = Field(description="Validated city list.")
     budget: int
     days: int
@@ -83,3 +109,6 @@ class TripResponse(BaseModel):
     citations: List[str] = Field(default=[], description="Source URLs backing recommendations.")
     confidence_score: float = Field(default=0.8, description="Retrieval confidence 0.0-1.0.")
     agent_log: List[AgentLogEntry] = Field(default=[], description="Agent execution log.")
+
+    class Config:
+        from_attributes = True

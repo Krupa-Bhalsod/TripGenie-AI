@@ -1,20 +1,13 @@
 from app.core.llm import create_agent
 from app.tools.travel_tools import activity_search_tool
+from app.core.prompt_loader import load_prompt
 
 
 activity_agent = create_agent(
     tools=[
        activity_search_tool
     ],
-    system_prompt="""
-You are an activity and attractions specialist.
-Your task is to find REAL, exciting things to do and places to eat in the user's destination.
-
-RULES:
-1. STRICT LOCATION: Stay strictly within the user's requested region. Do NOT suggest activities in other states or countries.
-2. GEOGRAPHIC PROXIMITY: If moving between cities, specifically find "on the way" attractions or sights to visit.
-3. REAL DATA: Use actual names of attractions, restaurants, and food items found via web search. No placeholders.
-"""
+    system_prompt=load_prompt("activity_agent")
 )
 
 
