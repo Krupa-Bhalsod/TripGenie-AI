@@ -4,11 +4,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.core.config import settings
-from app.db.mongodb import mongodb
+from app.db.sqlite import engine, Base
 from app.api.auth_routes import router as auth_router
 from app.api.trip_routes import router as trip_router
 from app.core.exceptions import APIError
 from app.core.logger import get_logger
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
 
 logger = get_logger(__name__)
 
@@ -16,10 +19,10 @@ logger = get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    await mongodb.connect()
+    logger.info("🚀 Starting TripGenie AI API")
     yield
     # Shutdown
-    await mongodb.close()
+    logger.info("👋 Shutting down TripGenie AI API")
 
 
 app = FastAPI(

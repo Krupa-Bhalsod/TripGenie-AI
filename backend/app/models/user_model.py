@@ -1,5 +1,17 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
+from sqlalchemy import Column, Integer, String, JSON
+from app.db.sqlite import Base
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    email = Column(String, unique=True, index=True)
+    password_hash = Column(String)
+    preferences = Column(JSON, default={})
 
 
 class UserPreferences(BaseModel):
@@ -20,10 +32,14 @@ class UserLogin(BaseModel):
 
 
 class UserDB(BaseModel):
+    id: Optional[int] = None
     name: str
     email: EmailStr
     password_hash: str
     preferences: UserPreferences = UserPreferences()
+
+    class Config:
+        from_attributes = True
 
 
 class UserResponse(BaseModel):

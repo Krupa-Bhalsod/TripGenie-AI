@@ -5,8 +5,11 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
 from app.core.config import settings
+from app.db.sqlite import get_db
+from app.models.user_model import User
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -38,10 +41,10 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return encoded_jwt
 
 
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security_scheme)):
-    from app.db.mongodb import mongodb
-    from app.models.user_model import UserDB
-
+async def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(security_scheme),
+    db: Session = Depends(get_db)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -57,8 +60,8 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     except JWTError:
         raise credentials_exception
 
-    user_dict = await mongodb.db["users"].find_one({"email": token_data.email})
-    if user_dict is None:
+    user = db.query(User).filter(User.email == token_data.email).first()
+    if user is None:
         raise credentials_exception
     
-    return UserDB(**user_dict)
+    return user

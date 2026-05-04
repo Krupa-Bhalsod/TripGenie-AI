@@ -1,0 +1,98 @@
+# 🚀 TripGenie AI - Run Guide
+
+This guide contains all the commands and details needed to set up and run the TripGenie AI project.
+
+---
+
+## 🛠 Prerequisites
+
+Ensure you have the following installed:
+- Python 3.13.13
+- Conda (Miniconda or Anaconda)
+- Node.js 18+ & npm
+
+---
+
+## 1️⃣ Environment Configuration
+
+1. Locate the `.env` file in the root directory.
+2. Fill in the following required API keys:
+   - `GROQ_API_KEY`: Get from https://console.groq.com/
+   - `TAVILY_API_KEY`: Get from https://tavily.com/
+   - `GOOGLE_API_KEY`: (Optional) If using Gemini
+   - `OPENAI_API_KEY`: (Optional) If using OpenAI
+3. Configure your `LLM_PROVIDER` in `.env`:
+   - Options: `groq`, `gemini`, `openai`, `ollama`
+
+---
+
+## 2️⃣ Backend Setup (FastAPI)
+
+Open a new terminal:
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Create a Conda environment
+conda create -n tripgenie python=3.13.13 -y
+
+# Activate the environment
+conda activate tripgenie
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the backend server
+python -m uvicorn app.main:app --reload
+```
+
+The backend will be available at: http://localhost:8000
+API Documentation (Swagger): http://localhost:8000/docs
+
+---
+
+## 3️⃣ Frontend Setup (Next.js)
+
+Open a second terminal:
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Run the development server
+npm run dev
+```
+
+The frontend will be available at: http://localhost:3000
+
+---
+
+## 4️⃣ Database Requirements
+
+- The project now uses **SQLite**, so no external database installation is required!
+- The database file `db.sqlite` will be created automatically in the `backend` folder.
+- You can change the database URL in the `.env` file via `SQLITE_URL`.
+
+---
+
+## 🧪 Testing the LLM Connection
+
+You can run a quick test script to verify your LLM setup:
+
+```bash
+cd backend
+python test_qwen.py
+```
+
+---
+
+## 📝 Switching LLM Models
+
+To switch models or providers, simply update your `.env` file:
+- Change `LLM_PROVIDER` to your preferred choice.
+- (Optional) Use `LLM_MODEL` to override the default model name.
+- Restart the backend server for changes to take effect.
